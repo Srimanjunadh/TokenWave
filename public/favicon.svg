@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Faceted Polygon Emblem -->
+  <defs>
+    <linearGradient id="facet1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF334B"/>
+      <stop offset="100%" stop-color="#DE0826"/>
+    </linearGradient>
+    <linearGradient id="facet2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DE0826"/>
+      <stop offset="100%" stop-color="#9E0018"/>
+    </linearGradient>
+    <linearGradient id="facet3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5C6E"/>
+      <stop offset="100%" stop-color="#DE0826"/>
+    </linearGradient>
+    <linearGradient id="facet4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9E0018"/>
+      <stop offset="100%" stop-color="#55000C"/>
+    </linearGradient>
+  </defs>
+  <!-- Main faceted polygon structure -->
+  <polygon points="24,4 42,14 42,34 24,44 6,34 6,14" fill="#0B0F19" stroke="#DE0826" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Facets -->
+  <polygon points="24,4 42,14 24,24" fill="url(#facet1)" opacity="0.95"/>
+  <polygon points="42,14 42,34 24,24" fill="url(#facet2)" opacity="0.9"/>
+  <polygon points="42,34 24,44 24,24" fill="url(#facet4)" opacity="0.95"/>
+  <polygon points="24,44 6,34 24,24" fill="url(#facet2)" opacity="0.85"/>
+  <polygon points="6,34 6,14 24,24" fill="url(#facet1)" opacity="0.8"/>
+  <polygon points="6,14 24,4 24,24" fill="url(#facet3)" opacity="0.95"/>
+  <!-- Inner core dot -->
+  <circle cx="24" cy="24" r="3.5" fill="#FFFFFF"/>
+</svg>
