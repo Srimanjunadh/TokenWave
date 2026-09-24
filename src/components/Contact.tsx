@@ -157,9 +157,6 @@ export const Contact: React.FC<ContactProps> = ({ selectedServicePreset, onClear
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 block mb-3">
-            Contact Us
-          </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 font-heading tracking-tight">
             Schedule an Applied AI Pilot with Our Principal Architects
           </h2>
@@ -174,11 +171,6 @@ export const Contact: React.FC<ContactProps> = ({ selectedServicePreset, onClear
             {/* Direct Channel Card */}
             <div className="p-7 rounded-2xl bg-slate-900 text-white border border-slate-800 shadow-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-2xl pointer-events-none" />
-
-              <div className="text-xs font-mono uppercase tracking-wider text-blue-400 font-bold mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                Direct Architectural Inquiry
-              </div>
 
               <h3 className="text-xl font-bold font-heading text-white">
                 Enterprise Pilot Fast-Track

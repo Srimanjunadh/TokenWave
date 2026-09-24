@@ -50,9 +50,6 @@ export const Careers: React.FC<CareersProps> = ({ onApplyForRole }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 block mb-3">
-            Careers
-          </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 font-heading tracking-tight">
             Build Sovereign Intelligence at TokenWave AI
           </h2>

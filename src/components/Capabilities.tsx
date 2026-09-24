@@ -10,8 +10,7 @@ import {
   Zap,
   Code2,
   CheckCircle2,
-  X,
-  Sparkles
+  X
 } from 'lucide-react';
 import type { CapabilityItem } from '../types';
 import { CAPABILITIES_DATA } from '../data/mockData';
@@ -144,9 +143,6 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start mb-14 sm:mb-16">
           {/* Left Column: Small Tagline */}
           <div className="lg:col-span-4">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 block mb-2">
-              Capabilities
-            </span>
             <p className="text-sm font-medium text-slate-500 max-w-[240px] leading-relaxed">
               TokenWave is built for sovereign enterprise intelligence.
             </p>
@@ -277,10 +273,6 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
                   {getCardIcon(selectedModalCap.iconType)}
                 </div>
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-mono font-bold uppercase tracking-wider mb-1">
-                    <Sparkles className="w-3 h-3" />
-                    <span>Technical Architecture Spec</span>
-                  </div>
                   <h3 className="text-xl sm:text-2xl font-bold font-heading text-white">
                     {selectedModalCap.title}
                   </h3>

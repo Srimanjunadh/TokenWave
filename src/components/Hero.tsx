@@ -424,19 +424,10 @@ export const Hero: React.FC<HeroProps> = ({ isPreloaderDone = false }) => {
                     <Cpu className="w-32 h-32 text-blue-500" />
                   </div>
 
-                  <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                    <div>
-                      <div className="text-xs font-mono uppercase text-blue-400 font-bold tracking-wider">
-                        Active Node Telemetry
-                      </div>
-                      <h4 className="text-lg font-bold text-white mt-0.5 font-heading">
-                        {agentNodes[activeNode].name}
-                      </h4>
-                    </div>
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      Deterministic Guard Active
-                    </span>
+                  <div className="pb-4 border-b border-slate-800">
+                    <h4 className="text-lg font-bold text-white font-heading">
+                      {agentNodes[activeNode].name}
+                    </h4>
                   </div>
 
                   <div className="mt-5 grid grid-cols-2 gap-4 font-mono text-xs">

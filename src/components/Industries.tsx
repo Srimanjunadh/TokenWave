@@ -55,9 +55,6 @@ export const Industries: React.FC<IndustriesProps> = ({ onSelectIndustry }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 block mb-3">
-            Industries
-          </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 font-heading tracking-tight">
             Proven at Scale in High-Stakes Production
           </h2>
@@ -160,14 +157,8 @@ export const Industries: React.FC<IndustriesProps> = ({ onSelectIndustry }) => {
             {/* Right Live Simulation Console */}
             <div className="lg:col-span-6">
               <div className="rounded-2xl bg-midnight-950 border border-slate-800 shadow-2xl p-6 text-slate-300 font-mono relative overflow-hidden">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800 text-xs">
-                  <div className="flex items-center gap-2 text-white font-bold">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>PRODUCTION AGENT TRACE</span>
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[11px]">
-                    STATUS: {current.telemetrySimulation.status}
-                  </span>
+                <div className="pb-4 border-b border-slate-800 text-xs text-white font-bold">
+                  <span>PRODUCTION AGENT TRACE</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 my-4 text-xs">

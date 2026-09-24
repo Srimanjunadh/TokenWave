@@ -18,9 +18,6 @@ export const Insights: React.FC<InsightsProps> = ({ onOpenCaseStudyModal }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 block mb-3">
-            Insights
-          </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 font-heading tracking-tight">
             Measurable ROI Delivered in Live Production Environments
           </h2>
@@ -36,10 +33,7 @@ export const Insights: React.FC<InsightsProps> = ({ onOpenCaseStudyModal }) => {
               <Award className="w-7 h-7" />
             </div>
             <div>
-              <div className="text-xs font-mono uppercase tracking-wider text-blue-400 font-bold">
-                Analyst Recognition
-              </div>
-              <h4 className="text-lg font-bold text-white font-heading mt-0.5">
+              <h4 className="text-lg font-bold text-white font-heading">
                 Leader in 2026 IDC MarketScape
               </h4>
               <p className="text-xs text-slate-400 mt-1">
@@ -53,10 +47,7 @@ export const Insights: React.FC<InsightsProps> = ({ onOpenCaseStudyModal }) => {
               <Sparkles className="w-7 h-7" />
             </div>
             <div>
-              <div className="text-xs font-mono uppercase tracking-wider text-blue-400 font-bold">
-                Industry Excellence Award
-              </div>
-              <h4 className="text-lg font-bold text-white font-heading mt-0.5">
+              <h4 className="text-lg font-bold text-white font-heading">
                 Catalyst Innovation Award Winner
               </h4>
               <p className="text-xs text-slate-400 mt-1">
