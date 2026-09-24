@@ -8,7 +8,6 @@ import {
   ShieldCheck, 
   Layers, 
   Zap,
-  Code2,
   CheckCircle2,
   X
 } from 'lucide-react';
@@ -74,7 +73,6 @@ const CARDS_CONFIG: CapabilityCardItem[] = [
 export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) => {
   const [startIndex, setStartIndex] = useState(0);
   const [selectedModalCap, setSelectedModalCap] = useState<CapabilityCardItem | null>(null);
-  const [activeCodeTab, setActiveCodeTab] = useState<'architecture' | 'features'>('architecture');
 
   const cardsPerPage = 3;
   const maxStartIndex = Math.max(0, CARDS_CONFIG.length - cardsPerPage);
@@ -314,50 +312,22 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
                 </div>
               </div>
 
-              {/* Architecture Code Snippet */}
+              {/* Key Features & Architecture Specifications */}
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                    <Code2 className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Production Architecture Blueprint</span>
-                  </h4>
-                  <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs font-mono">
-                    <button
-                      type="button"
-                      onClick={() => setActiveCodeTab('architecture')}
-                      className={`px-2.5 py-1 rounded transition-colors ${
-                        activeCodeTab === 'architecture' ? 'bg-blue-600 text-white font-semibold' : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      Python/Ray
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveCodeTab('features')}
-                      className={`px-2.5 py-1 rounded transition-colors ${
-                        activeCodeTab === 'features' ? 'bg-blue-600 text-white font-semibold' : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      Features
-                    </button>
-                  </div>
-                </div>
+                <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Key Architectural Specifications</span>
+                </h4>
 
-                <div className="rounded-xl bg-slate-950 border border-slate-800 p-4 font-mono text-xs overflow-x-auto text-slate-300">
-                  {activeCodeTab === 'architecture' ? (
-                    <pre>
-                      <code>{selectedModalCap.architectureSnippet}</code>
-                    </pre>
-                  ) : (
-                    <div className="space-y-2 py-2">
-                      {selectedModalCap.features.map((f, i) => (
-                        <div key={i} className="flex items-center gap-2 text-slate-300">
-                          <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                          <span>{f}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <div className="rounded-xl bg-slate-900 border border-slate-800 p-4">
+                  <div className="space-y-2.5">
+                    {selectedModalCap.features.map((f, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-slate-200 text-xs sm:text-sm leading-relaxed">
+                        <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 

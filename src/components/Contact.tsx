@@ -3,7 +3,6 @@ import {
   Mail, 
   MapPin, 
   Clock, 
-  ShieldAlert, 
   CheckCircle2, 
   Send, 
   Lock, 
@@ -246,15 +245,6 @@ export const Contact: React.FC<ContactProps> = ({ selectedServicePreset, onClear
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Hiring Fraud Disclaimer Callout */}
-            <div className="p-4 rounded-xl bg-slate-100 border border-slate-200 text-slate-800 text-xs flex items-start gap-3">
-              <ShieldAlert className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-              <div className="leading-relaxed">
-                <span className="font-bold block text-slate-900">Security &amp; Hiring Fraud Notice:</span>
-                TokenWave AI never solicits payments, equipment purchases, or software license deposits from job applicants or pilot partners. All legitimate communications originate exclusively from <span className="font-mono font-bold">@tokenwaveai.com</span>.
               </div>
             </div>
           </div>

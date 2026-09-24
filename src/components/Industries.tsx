@@ -5,7 +5,6 @@ import {
   Radio, 
   Flame, 
   Activity, 
-  ArrowRight,
   Lock
 } from 'lucide-react';
 import { INDUSTRIES_DATA } from '../data/mockData';
@@ -14,26 +13,10 @@ interface IndustriesProps {
   onSelectIndustry?: (industryName: string) => void;
 }
 
-export const Industries: React.FC<IndustriesProps> = ({ onSelectIndustry }) => {
+export const Industries: React.FC<IndustriesProps> = () => {
   const [activeTab, setActiveTab] = useState<string>(INDUSTRIES_DATA[0].id);
 
   const current = INDUSTRIES_DATA.find((ind) => ind.id === activeTab) || INDUSTRIES_DATA[0];
-
-  const handlePilotRequest = (indName: string) => {
-    if (onSelectIndustry) {
-      onSelectIndustry(indName);
-    }
-    const element = document.getElementById('contact');
-    if (element) {
-      const navOffset = 76;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: elementPosition - navOffset,
-        behavior: 'smooth',
-      });
-      history.pushState(null, '', '#contact');
-    }
-  };
 
   const getTabIcon = (id: string) => {
     switch (id) {
@@ -143,15 +126,6 @@ export const Industries: React.FC<IndustriesProps> = ({ onSelectIndustry }) => {
                 </div>
               </div>
 
-              <div className="pt-4">
-                <button
-                  onClick={() => handlePilotRequest(current.name)}
-                  className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 group cursor-pointer"
-                >
-                  <span>Schedule {current.name} Pilot</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </button>
-              </div>
             </div>
 
             {/* Right Live Simulation Console */}
