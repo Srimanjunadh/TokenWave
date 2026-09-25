@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { 
   MapPin, 
   Clock, 
@@ -6,24 +6,16 @@ import {
   Code2
 } from 'lucide-react';
 import { JOB_ROLES } from '../data/mockData';
+import { scrollToSection } from '../utils/scroll';
 
 interface CareersProps {
   onApplyForRole: (roleTitle: string) => void;
 }
 
-export const Careers: React.FC<CareersProps> = ({ onApplyForRole }) => {
+export const CareersComponent: React.FC<CareersProps> = ({ onApplyForRole }) => {
   const handleApply = (roleTitle: string) => {
     onApplyForRole(roleTitle);
-    const element = document.getElementById('contact');
-    if (element) {
-      const navOffset = 76;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: elementPosition - navOffset,
-        behavior: 'smooth',
-      });
-      history.pushState(null, '', '#contact');
-    }
+    scrollToSection('contact', { offset: -76 });
   };
 
   const cultureValues = [
@@ -173,3 +165,5 @@ export const Careers: React.FC<CareersProps> = ({ onApplyForRole }) => {
     </section>
   );
 };
+
+export const Careers = memo(CareersComponent);

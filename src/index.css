@@ -4,11 +4,14 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 80px;
+    overflow-x: clip;
   }
   body {
-    @apply bg-white text-slate-900 font-sans antialiased overflow-x-hidden;
+    @apply bg-white text-slate-900 font-sans antialiased;
+    overflow-x: clip;
+    overscroll-behavior-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   ::selection {
     @apply bg-blue-600 text-white;

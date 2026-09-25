@@ -1,30 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { Menu, X, Search, Globe, Check } from 'lucide-react';
 import type { NavItem } from '../types';
+import { scrollToSection } from '../utils/scroll';
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'about', label: 'ABOUT US', href: '#about' },
   { id: 'capabilities', label: 'CAPABILITIES', href: '#capabilities' },
   { id: 'industries', label: 'INDUSTRIES', href: '#industries' },
-  { id: 'insights', label: 'INSIGHTS', href: '#insights' },
-  { id: 'careers', label: 'CAREERS', href: '#careers' },
+  { id: 'our-work', label: 'OUR WORK', href: '#our-work' },
   { id: 'contact', label: 'CONTACT US', href: '#contact' },
 ];
 
 const SEARCH_ITEMS = [
-  { title: 'Deterministic Orchestrator (Agent Kavacha)', section: 'capabilities', category: 'Capabilities' },
-  { title: 'Air-Gapped Sovereign Triton Node', section: 'capabilities', category: 'Capabilities' },
-  { title: 'Billion-Scale Vector Knowledge Mesh', section: 'capabilities', category: 'Capabilities' },
-  { title: 'Banking Kavacha — Autonomous Core Settlement', section: 'industries', category: 'Industries' },
-  { title: 'Healthcare Arogya — HIPAA Diagnostic Agents', section: 'industries', category: 'Industries' },
-  { title: 'Telecom Astra — Self-Healing Sub-40ms Network', section: 'industries', category: 'Industries' },
-  { title: 'Energy Urja — Grid-Edge Swarms', section: 'industries', category: 'Industries' },
+  { title: 'Applied AI Engineering (Autonomous Swarms & Fast Inference)', section: 'capabilities', category: 'Services' },
+  { title: 'Enterprise Data Engineering (Lakehouse, Streaming & Vector Mesh)', section: 'capabilities', category: 'Services' },
+  { title: 'Generative AI Solutions (Private Copilots & GraphRAG)', section: 'capabilities', category: 'Services' },
+  { title: 'Platform Reliability & DevOps (SREs & Cloud Native)', section: 'capabilities', category: 'Services' },
+  { title: 'Software Product Engineering (Hyper-Scale Systems)', section: 'capabilities', category: 'Services' },
+  { title: 'Commerce — Autonomous Checkout & Inventory Sync', section: 'industries', category: 'Industries' },
+  { title: 'Health — HIPAA Diagnostic & Ambient Clinical Copilot', section: 'industries', category: 'Industries' },
+  { title: 'Finance — Sub-16ms Settlement & Anti-Fraud Swarms', section: 'industries', category: 'Industries' },
+  { title: 'EdTech — Adaptive Learning & Automated Rubric Grading', section: 'industries', category: 'Industries' },
+  { title: 'Industrial — SCADA Predictive Maintenance & Digital Twins', section: 'industries', category: 'Industries' },
+  { title: 'Sports — Kinematic Telemetry & Real-Time Tactical AI', section: 'industries', category: 'Industries' },
+  { title: 'PropTech — Building Decarbonization & IoT Swarms', section: 'industries', category: 'Industries' },
+  { title: 'Agriculture — Multispectral Crop Telemetry & Autonomous Drip', section: 'industries', category: 'Industries' },
+  { title: 'Biotechnology — Generative Protein Folding & Molecular Docking', section: 'industries', category: 'Industries' },
+  { title: 'Government — FedRAMP High Sovereign Citizen Services', section: 'industries', category: 'Industries' },
+  { title: 'LeadCliques · Admission CRM Case Study', section: 'our-work', category: 'Our Work' },
+  { title: 'StaffCliques · Workforce Monitoring Case Study', section: 'our-work', category: 'Our Work' },
+  { title: 'ProcSquare · Live Proctoring Case Study', section: 'our-work', category: 'Our Work' },
+  { title: 'SchoolTrix · Institution & Mobile Platform Case Study', section: 'our-work', category: 'Our Work' },
+  { title: 'Talentrix · Campus Recruitment Case Study', section: 'our-work', category: 'Our Work' },
+  { title: 'MedClues · Hospital Operations Case Study', section: 'our-work', category: 'Our Work' },
+  { title: 'TeleBuddy · IVR Telecalling Case Study', section: 'our-work', category: 'Our Work' },
   { title: 'Governed Intelligence & Three Pillars', section: 'about', category: 'About Us' },
-  { title: 'Apex Global Financial Settlement Case Study', section: 'insights', category: 'Insights' },
-  { title: 'MedGlobal Autonomous Radiology Case Study', section: 'insights', category: 'Insights' },
-  { title: 'EnergyCore Grid Load Balancing Case Study', section: 'insights', category: 'Insights' },
-  { title: 'Careers — Principal Distributed Systems Engineer', section: 'careers', category: 'Careers' },
-  { title: 'Careers — RL & Formal Guardrails Engineer', section: 'careers', category: 'Careers' },
   { title: 'Schedule Technical Pilot / Contact Us', section: 'contact', category: 'Contact' },
 ];
 
@@ -43,7 +53,7 @@ interface NavbarProps {
   isPreloaderDone?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ 
+export const NavbarComponent: React.FC<NavbarProps> = ({ 
   activeSection, 
   onSelectSection, 
   onReplayIntro, 
@@ -128,24 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       onSelectSection(targetId);
     }
 
-    if (targetId === 'home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      history.pushState(null, '', '#home');
-      return;
-    }
-
-    const element = document.getElementById(targetId);
-    if (element) {
-      const navOffset = 64;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-      history.pushState(null, '', `#${targetId}`);
-    }
+    scrollToSection(targetId);
   };
 
   const filteredSearchResults = searchQuery.trim() === ''
@@ -310,7 +303,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <a
                     key={item.id}
                     href={item.href}
-                    onClick={(e) => handleSmoothScroll(e, item.id)}
+                    onClick={(e) => {
+                      setMobileMenuOpen(false);
+                      handleSmoothScroll(e, item.id);
+                    }}
                     className={`py-1 text-xs font-bold uppercase tracking-wider transition-colors ${
                       isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600'
                     }`}
@@ -375,7 +371,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Results List */}
-            <div className="max-h-80 overflow-y-auto p-2">
+            <div className="max-h-80 overflow-y-auto p-2" data-lenis-prevent>
               {filteredSearchResults.length === 0 ? (
                 <div className="p-8 text-center text-sm text-slate-500">
                   No matching results found for "{searchQuery}".
@@ -413,3 +409,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     </>
   );
 };
+
+export const Navbar = memo(NavbarComponent);
+

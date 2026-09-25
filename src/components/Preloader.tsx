@@ -11,12 +11,13 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
   const containerRef = useRef<HTMLHeadingElement>(null);
   const tokenRef = useRef<HTMLSpanElement>(null);
+  const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
-    // Disable scrolling during preloading
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
+  useEffect(() => {
     // Measure exact boundary percentage between "Token" and "Wave"
     let splitPercent = 50.8;
     if (tokenRef.current && containerRef.current) {
@@ -69,11 +70,10 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         // Brief hold at 100% (250ms), then graceful smooth fade-out
         setTimeout(() => {
           setIsFadingOut(true);
-          if (onComplete) onComplete();
+          onCompleteRef.current?.();
 
           setTimeout(() => {
             setIsRemoved(true);
-            document.body.style.overflow = originalOverflow;
           }, 700);
         }, 250);
       }
@@ -83,15 +83,14 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      document.body.style.overflow = originalOverflow;
     };
-  }, [onComplete]);
+  }, []);
 
   if (isRemoved) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white transition-opacity duration-700 ease-in-out select-none ${
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white transition-opacity duration-700 ease-in-out select-none touch-none ${
         isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
       aria-hidden="true"

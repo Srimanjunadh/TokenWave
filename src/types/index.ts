@@ -48,6 +48,8 @@ export interface CaseStudy {
     title: string;
   };
   stack: string[];
+  link?: string;
+  tags?: string[];
 }
 
 export interface JobRole {

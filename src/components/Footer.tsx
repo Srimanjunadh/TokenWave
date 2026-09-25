@@ -1,29 +1,20 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { ArrowUp } from 'lucide-react';
 import type { LegalModalType } from '../types';
+import { scrollToSection } from '../utils/scroll';
 
 interface FooterProps {
   onOpenLegalModal: (type: LegalModalType) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenLegalModal }) => {
+export const FooterComponent: React.FC<FooterProps> = ({ onOpenLegalModal }) => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    history.pushState(null, '', '#home');
+    scrollToSection('home');
   };
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
-    const element = document.getElementById(targetId);
-    if (element) {
-      const navOffset = 64;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: elementPosition - navOffset,
-        behavior: 'smooth',
-      });
-      history.pushState(null, '', `#${targetId}`);
-    }
+    scrollToSection(targetId);
   };
 
   return (
@@ -45,65 +36,35 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegalModal }) => {
         {/* ========================================================================= */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-14 pt-12 sm:pt-14 pb-16 text-xs sm:text-[13px]">
           
-          {/* Column 1: Products */}
+          {/* Column 1: Services & Capabilities */}
           <div>
             <h3 className="text-sm font-semibold text-white mb-5 sm:mb-6 tracking-wide">
-              Products
+              Capabilities &amp; Services
             </h3>
             <ul className="space-y-3 sm:space-y-3.5 text-slate-400 font-normal">
               <li>
                 <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Digital Banking
+                  Applied AI Engineering
                 </a>
               </li>
               <li>
                 <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Personal Accounts
+                  Enterprise Data Engineering
                 </a>
               </li>
               <li>
                 <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Business Accounts
+                  Generative AI Solutions
                 </a>
               </li>
               <li>
                 <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Mobile App
+                  Platform Reliability &amp; DevOps
                 </a>
               </li>
               <li>
                 <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Instant Transfers
-                </a>
-              </li>
-              <li>
-                <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Bill Pay
-                </a>
-              </li>
-              <li>
-                <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  International Payments
-                </a>
-              </li>
-              <li>
-                <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Savings Goals
-                </a>
-              </li>
-              <li>
-                <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Virtual Cards
-                </a>
-              </li>
-              <li>
-                <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Debit Management
-                </a>
-              </li>
-              <li>
-                <a href="#capabilities" onClick={(e) => handleSmoothScroll(e, 'capabilities')} className="hover:text-white transition-colors">
-                  Credit &amp; Rights
+                  Software Product Engineering
                 </a>
               </li>
             </ul>
@@ -117,52 +78,52 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegalModal }) => {
             <ul className="space-y-3 sm:space-y-3.5 text-slate-400 font-normal">
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Freelancers
+                  Commerce
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Small Businesses
+                  Health
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Online Sellers
+                  Finance
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Agencies
+                  EdTech
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Retail Stores
+                  Industrial
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Travel &amp; Hospitality
+                  Sports
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Health &amp; Wellness
+                  PropTech
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Finance &amp; Legal
+                  Agriculture
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  Education Providers
+                  Biotechnology
                 </a>
               </li>
               <li>
                 <a href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} className="hover:text-white transition-colors">
-                  NGOs &amp; Donors
+                  Government
                 </a>
               </li>
             </ul>
@@ -175,27 +136,27 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegalModal }) => {
             </h3>
             <ul className="space-y-3 sm:space-y-3.5 text-slate-400 font-normal">
               <li>
-                <a href="#insights" onClick={(e) => handleSmoothScroll(e, 'insights')} className="hover:text-white transition-colors">
+                <a href="#our-work" onClick={(e) => handleSmoothScroll(e, 'our-work')} className="hover:text-white transition-colors">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#insights" onClick={(e) => handleSmoothScroll(e, 'insights')} className="hover:text-white transition-colors">
+                <a href="#our-work" onClick={(e) => handleSmoothScroll(e, 'our-work')} className="hover:text-white transition-colors">
                   Blog
                 </a>
               </li>
               <li>
-                <a href="#insights" onClick={(e) => handleSmoothScroll(e, 'insights')} className="hover:text-white transition-colors">
+                <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="hover:text-white transition-colors">
                   FAQs
                 </a>
               </li>
               <li>
-                <a href="#insights" onClick={(e) => handleSmoothScroll(e, 'insights')} className="hover:text-white transition-colors">
+                <a href="#our-work" onClick={(e) => handleSmoothScroll(e, 'our-work')} className="hover:text-white transition-colors">
                   Security Guide
                 </a>
               </li>
               <li>
-                <a href="#insights" onClick={(e) => handleSmoothScroll(e, 'insights')} className="hover:text-white transition-colors">
+                <a href="#our-work" onClick={(e) => handleSmoothScroll(e, 'our-work')} className="hover:text-white transition-colors">
                   Fees &amp; Limits
                 </a>
               </li>
@@ -233,17 +194,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegalModal }) => {
                 </a>
               </li>
               <li>
-                <a href="#careers" onClick={(e) => handleSmoothScroll(e, 'careers')} className="hover:text-white transition-colors">
-                  Careers
-                </a>
-              </li>
-              <li>
                 <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="hover:text-white transition-colors">
                   Partnerships
                 </a>
               </li>
               <li>
-                <a href="#insights" onClick={(e) => handleSmoothScroll(e, 'insights')} className="hover:text-white transition-colors">
+                <a href="#our-work" onClick={(e) => handleSmoothScroll(e, 'our-work')} className="hover:text-white transition-colors">
                   Press &amp; Media
                 </a>
               </li>
@@ -288,3 +244,5 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegalModal }) => {
     </footer>
   );
 };
+
+export const Footer = memo(FooterComponent);

@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { 
+  Store, 
+  HeartPulse, 
   Building2, 
-  Stethoscope, 
-  Radio, 
-  Flame, 
-  Activity, 
-  Lock
+  GraduationCap, 
+  Factory, 
+  Trophy, 
+  Building, 
+  Sprout, 
+  Dna, 
+  Landmark,
+  Lock,
+  Activity
 } from 'lucide-react';
 import { INDUSTRIES_DATA } from '../data/mockData';
 
@@ -13,23 +19,35 @@ interface IndustriesProps {
   onSelectIndustry?: (industryName: string) => void;
 }
 
-export const Industries: React.FC<IndustriesProps> = () => {
+export const IndustriesComponent: React.FC<IndustriesProps> = () => {
   const [activeTab, setActiveTab] = useState<string>(INDUSTRIES_DATA[0].id);
 
   const current = INDUSTRIES_DATA.find((ind) => ind.id === activeTab) || INDUSTRIES_DATA[0];
 
   const getTabIcon = (id: string) => {
     switch (id) {
-      case 'banking':
-        return <Building2 className="w-5 h-5" />;
-      case 'healthcare':
-        return <Stethoscope className="w-5 h-5" />;
-      case 'telecom':
-        return <Radio className="w-5 h-5" />;
-      case 'energy':
-        return <Flame className="w-5 h-5" />;
+      case 'commerce':
+        return <Store className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'health':
+        return <HeartPulse className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'finance':
+        return <Building2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'edtech':
+        return <GraduationCap className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'industrial':
+        return <Factory className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'sports':
+        return <Trophy className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'proptech':
+        return <Building className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'agriculture':
+        return <Sprout className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'biotechnology':
+        return <Dna className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
+      case 'government':
+        return <Landmark className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
       default:
-        return <Activity className="w-5 h-5" />;
+        return <Activity className="w-4 h-4 sm:w-4.5 sm:h-4.5" />;
     }
   };
 
@@ -41,22 +59,22 @@ export const Industries: React.FC<IndustriesProps> = () => {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 font-heading tracking-tight">
             Proven at Scale in High-Stakes Production
           </h2>
-          <p className="mt-4 text-slate-600 text-base sm:text-lg">
+          <p className="mt-4 text-slate-600 text-base sm:text-lg max-w-2xl mx-auto text-center leading-relaxed">
             Where downtime costs millions and failure is not an option, TokenWave AI delivers deterministic, air-gapped agent swarms tailored for your regulatory reality.
           </p>
         </div>
 
         {/* Industry Switcher Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5 max-w-5xl mx-auto mb-12">
           {INDUSTRIES_DATA.map((ind) => {
             const isActive = activeTab === ind.id;
             return (
               <button
                 key={ind.id}
                 onClick={() => setActiveTab(ind.id)}
-                className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'bg-slate-950 text-white shadow-xl shadow-slate-900/20 ring-2 ring-blue-600'
+                    ? 'bg-slate-950 text-white shadow-lg shadow-slate-900/20 ring-2 ring-blue-600'
                     : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-950 border border-slate-200'
                 }`}
               >
@@ -83,14 +101,14 @@ export const Industries: React.FC<IndustriesProps> = () => {
                   <div className="text-xs font-mono uppercase tracking-wider text-blue-600 font-bold mb-1">
                     The Enterprise Challenge
                   </div>
-                  <p>{current.challenge}</p>
+                  <p className="text-justify leading-relaxed">{current.challenge}</p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-white border border-slate-200/70">
                   <div className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold mb-1">
                     TokenWave Sovereign Solution
                   </div>
-                  <p>{current.solution}</p>
+                  <p className="text-justify leading-relaxed">{current.solution}</p>
                 </div>
               </div>
 
@@ -174,3 +192,6 @@ export const Industries: React.FC<IndustriesProps> = () => {
     </section>
   );
 };
+
+export const Industries = memo(IndustriesComponent);
+

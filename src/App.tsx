@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Preloader } from './components/Preloader';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -6,11 +6,11 @@ import { Capabilities } from './components/Capabilities';
 import { Industries } from './components/Industries';
 import { About } from './components/About';
 import { Insights } from './components/Insights';
-import { Careers } from './components/Careers';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { LegalModal } from './components/LegalModal';
 import type { LegalModalType, CaseStudy } from './types';
+import { initSmoothScroll } from './utils/scroll';
 
 export function App() {
   const [activeSection, setActiveSection] = useState<string>('home');
@@ -18,64 +18,90 @@ export function App() {
   const [activeModal, setActiveModal] = useState<LegalModalType>(null);
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null);
   const [preloaderKey, setPreloaderKey] = useState<number>(0);
+  const [preloaderDone, setPreloaderDone] = useState<boolean>(false);
 
-  // Active section tracking on scroll
+  // Initialize Lenis buttery-smooth inertial scroll
   useEffect(() => {
-    const sectionIds = ['home', 'about', 'capabilities', 'industries', 'insights', 'careers', 'contact'];
+    const lenis = initSmoothScroll();
 
-    const handleScroll = () => {
-      // 140px offset accounts for fixed navbar (64px) + breathing room
-      const scrollPosition = window.scrollY + 140;
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el) {
-          const top = el.getBoundingClientRect().top + window.pageYOffset;
-          if (top <= scrollPosition) {
-            setActiveSection(sectionIds[i]);
-            break;
-          }
-        }
+    // Listen to lenis scroll for instant top and bottom boundary tracking
+    const unsubscribe = lenis?.on('scroll', (e) => {
+      if (e.scroll < 60) {
+        setActiveSection((prev) => (prev === 'home' ? prev : 'home'));
+      } else if (e.limit > 0 && e.limit - e.scroll < 80) {
+        setActiveSection((prev) => (prev === 'contact' ? prev : 'contact'));
+      }
+    });
+
+    return () => {
+      unsubscribe?.();
+      lenis?.destroy();
+    };
+  }, []);
+
+  // Zero-layout-thrashing IntersectionObserver for active section tracking
+  useEffect(() => {
+    const sectionIds = ['home', 'about', 'capabilities', 'industries', 'our-work', 'contact'];
+
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      const intersecting = entries.filter((entry) => entry.isIntersecting);
+      if (intersecting.length > 0) {
+        intersecting.sort((a, b) => {
+          return Math.abs(a.boundingClientRect.top - 80) - Math.abs(b.boundingClientRect.top - 80);
+        });
+        const targetId = intersecting[0].target.id;
+        setActiveSection((prev) => (prev === targetId ? prev : targetId));
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(observerCallback, {
+      rootMargin: '-70px 0px -55% 0px',
+      threshold: [0, 0.1, 0.25],
+    });
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
-  const handleSelectService = (serviceName: string) => {
+  const handleSelectService = useCallback((serviceName: string) => {
     setSelectedServicePreset(serviceName);
-  };
+  }, []);
 
-  const handleApplyForRole = (roleTitle: string) => {
-    setSelectedServicePreset(roleTitle);
-  };
-
-  const handleOpenCaseStudyModal = (caseStudy: CaseStudy) => {
+  const handleOpenCaseStudyModal = useCallback((caseStudy: CaseStudy) => {
     setSelectedCaseStudy(caseStudy);
     setActiveModal('case_study');
-  };
+  }, []);
 
-  const [preloaderDone, setPreloaderDone] = useState<boolean>(false);
-
-  const handleOpenLegalModal = (type: LegalModalType) => {
+  const handleOpenLegalModal = useCallback((type: LegalModalType) => {
     setActiveModal(type);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setActiveModal(null);
     setSelectedCaseStudy(null);
-  };
+  }, []);
 
-  const handleReplayIntro = () => {
+  const handleClearPreset = useCallback(() => {
+    setSelectedServicePreset('');
+  }, []);
+
+  const handleReplayIntro = useCallback(() => {
     setPreloaderDone(false);
     setPreloaderKey((prev) => prev + 1);
-  };
+  }, []);
+
+  const handlePreloaderComplete = useCallback(() => {
+    setPreloaderDone(true);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       {/* Full-Screen Branded Preloader with Dual-Tone Logo Reveal */}
-      <Preloader key={preloaderKey} onComplete={() => setPreloaderDone(true)} />
+      <Preloader key={preloaderKey} onComplete={handlePreloaderComplete} />
 
       {/* 1. Sticky Navigation Bar */}
       <Navbar 
@@ -102,13 +128,10 @@ export function App() {
         {/* 6. Case Studies & Strategic Insights */}
         <Insights onOpenCaseStudyModal={handleOpenCaseStudyModal} />
 
-        {/* 7. Careers & High-Velocity Culture */}
-        <Careers onApplyForRole={handleApplyForRole} />
-
-        {/* 8. Enterprise Pilot Intake Form */}
+        {/* 7. Enterprise Pilot Intake Form */}
         <Contact
           selectedServicePreset={selectedServicePreset}
-          onClearPreset={() => setSelectedServicePreset('')}
+          onClearPreset={handleClearPreset}
         />
       </main>
 

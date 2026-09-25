@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { 
   ArrowLeft,
   ArrowRight,
-  Bot, 
+  Brain, 
   Database, 
-  Cpu, 
-  ShieldCheck, 
-  Layers, 
+  Sparkles, 
+  Cloud, 
+  Code2, 
   Zap,
   CheckCircle2,
   X
 } from 'lucide-react';
 import type { CapabilityItem } from '../types';
 import { CAPABILITIES_DATA } from '../data/mockData';
+import { scrollToSection } from '../utils/scroll';
 
 interface CapabilitiesProps {
   onSelectService?: (serviceName: string) => void;
@@ -21,7 +22,7 @@ interface CapabilitiesProps {
 interface CapabilityCardItem extends CapabilityItem {
   defaultBg: string;
   hoverImg: string;
-  iconType: 'bot' | 'database' | 'cpu' | 'shield' | 'layers' | 'zap';
+  iconType: 'brain' | 'database' | 'sparkles' | 'cloud' | 'code';
   ctaLabel: string;
 }
 
@@ -30,87 +31,128 @@ const CARDS_CONFIG: CapabilityCardItem[] = [
     ...CAPABILITIES_DATA[0],
     defaultBg: '#F4F4F0',
     hoverImg: '/card-team.jpg',
-    iconType: 'bot',
-    ctaLabel: 'Explore Swarm Architecture',
+    iconType: 'brain',
+    ctaLabel: 'Explore Applied AI',
   },
   {
     ...CAPABILITIES_DATA[1],
     defaultBg: '#ECE8FB',
     hoverImg: '/card-mesh.jpg',
     iconType: 'database',
-    ctaLabel: 'Inspect Vector Mesh',
+    ctaLabel: 'Inspect Data Architecture',
   },
   {
     ...CAPABILITIES_DATA[2],
-    defaultBg: '#ECF6B7',
-    hoverImg: '/card-infra.jpg',
-    iconType: 'cpu',
-    ctaLabel: 'View Sovereign Specs',
+    defaultBg: '#FEF9C3',
+    hoverImg: '/hero-bg.jpg',
+    iconType: 'sparkles',
+    ctaLabel: 'Explore GenAI Solutions',
   },
   {
     ...CAPABILITIES_DATA[3],
     defaultBg: '#E0F2FE',
-    hoverImg: '/hero-bg.jpg',
-    iconType: 'shield',
-    ctaLabel: 'Inspect Formal Verification',
+    hoverImg: '/card-infra.jpg',
+    iconType: 'cloud',
+    ctaLabel: 'View DevOps & SRE Specs',
   },
   {
     ...CAPABILITIES_DATA[4],
     defaultBg: '#F1F5F9',
     hoverImg: '/card-team.jpg',
-    iconType: 'layers',
-    ctaLabel: 'View Foundation Benchmarks',
-  },
-  {
-    ...CAPABILITIES_DATA[5],
-    defaultBg: '#E8F5E9',
-    hoverImg: '/card-infra.jpg',
-    iconType: 'zap',
-    ctaLabel: 'Explore Sovereign Models',
+    iconType: 'code',
+    ctaLabel: 'Inspect Product Engineering',
   },
 ];
 
-export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) => {
-  const [startIndex, setStartIndex] = useState(0);
+export const CapabilitiesComponent: React.FC<CapabilitiesProps> = ({ onSelectService }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const [selectedModalCap, setSelectedModalCap] = useState<CapabilityCardItem | null>(null);
 
-  const cardsPerPage = 3;
-  const maxStartIndex = Math.max(0, CARDS_CONFIG.length - cardsPerPage);
-
-  const handlePrevSlide = () => {
-    setStartIndex((prev) => (prev > 0 ? prev - 1 : maxStartIndex));
-  };
-
-  const handleNextSlide = () => {
-    setStartIndex((prev) => (prev < maxStartIndex ? prev + 1 : 0));
-  };
-
-  const visibleCards = CARDS_CONFIG.slice(startIndex, startIndex + cardsPerPage);
-
-  const getCardIcon = (type: string) => {
-    switch (type) {
-      case 'bot':
-        return <Bot className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
-      case 'database':
-        return <Database className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
-      case 'cpu':
-        return <Cpu className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
-      case 'shield':
-        return <ShieldCheck className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
-      case 'layers':
-        return <Layers className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
-      default:
-        return <Zap className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
+  const scrollToIndex = (index: number) => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    const cards = container.children;
+    if (cards[index]) {
+      const card = cards[index] as HTMLElement;
+      container.scrollTo({
+        left: card.offsetLeft - container.offsetLeft,
+        behavior: 'smooth',
+      });
+      setCurrentIndex(index);
     }
   };
 
-  const handleViewAllServices = () => {
-    const el = document.getElementById('contact');
-    if (el) {
-      const navOffset = 64;
-      const pos = el.getBoundingClientRect().top + window.pageYOffset - navOffset;
-      window.scrollTo({ top: pos, behavior: 'smooth' });
-      history.pushState(null, '', '#contact');
+  const handlePrev = () => {
+    const prev = currentIndex > 0 ? currentIndex - 1 : CARDS_CONFIG.length - 1;
+    scrollToIndex(prev);
+  };
+
+  const handleNext = () => {
+    const next = (currentIndex + 1) % CARDS_CONFIG.length;
+    scrollToIndex(next);
+  };
+
+  // Automatic scrolling every 4.5s, pauses on hover / touch
+  useEffect(() => {
+    if (isPaused) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => {
+        const next = (prev + 1) % CARDS_CONFIG.length;
+        if (scrollContainerRef.current) {
+          const container = scrollContainerRef.current;
+          const cards = container.children;
+          if (cards[next]) {
+            const card = cards[next] as HTMLElement;
+            container.scrollTo({
+              left: card.offsetLeft - container.offsetLeft,
+              behavior: 'smooth',
+            });
+          }
+        }
+        return next;
+      });
+    }, 4500);
+
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  // Keep currentIndex synchronized on manual swipe or scroll
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    const scrollLeft = container.scrollLeft;
+    const cards = Array.from(container.children) as HTMLElement[];
+    if (cards.length === 0) return;
+
+    let closest = 0;
+    let minDiff = Infinity;
+    cards.forEach((card, idx) => {
+      const diff = Math.abs(card.offsetLeft - container.offsetLeft - scrollLeft);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closest = idx;
+      }
+    });
+    setCurrentIndex(closest);
+  };
+
+  const getCardIcon = (type: string) => {
+    switch (type) {
+      case 'brain':
+        return <Brain className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
+      case 'database':
+        return <Database className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
+      case 'sparkles':
+        return <Sparkles className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
+      case 'cloud':
+        return <Cloud className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
+      case 'code':
+        return <Code2 className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
+      default:
+        return <Brain className="w-7 h-7 text-slate-900" strokeWidth={1.8} />;
     }
   };
 
@@ -119,16 +161,7 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
       onSelectService(capTitle);
     }
     setSelectedModalCap(null);
-    const element = document.getElementById('contact');
-    if (element) {
-      const navOffset = 64;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: elementPosition - navOffset,
-        behavior: 'smooth',
-      });
-      history.pushState(null, '', '#contact');
-    }
+    scrollToSection('contact');
   };
 
   return (
@@ -146,37 +179,36 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
             </p>
           </div>
 
-          {/* Right Column: Big Headline, Description & Pill CTA */}
+          {/* Right Column: Big Headline & Description */}
           <div className="lg:col-span-8">
             <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-extrabold text-slate-950 font-heading tracking-tight leading-[1.1]">
               AI Engineering Built Around Your Enterprise, Deterministic and Sovereign
             </h2>
-            <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl">
-              Safe, deterministic, and sovereign multi-agent swarms — all in one unified mesh.
+            <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl text-justify">
+              Scalable, deterministic, and sovereign architectures across applied AI, enterprise data, generative AI, cloud reliability, and software product engineering.
             </p>
-            <div className="mt-6">
-              <button
-                type="button"
-                onClick={handleViewAllServices}
-                className="px-6 py-2.5 rounded-full bg-slate-950 hover:bg-slate-900 text-white text-xs sm:text-sm font-semibold inline-flex items-center gap-2 shadow-xs hover:shadow transition-all cursor-pointer"
-              >
-                <span>View All Capabilities</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
           </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* 2. Interactive Cards Row matching Image 1 (Default) & Image 2 (Hover)     */}
+        {/* 2. Horizontal Scrollable Cards with Automatic Scrolling                   */}
         {/* ========================================================================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mb-10">
-          {visibleCards.map((card) => {
+        <div
+          ref={scrollContainerRef}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+          onScroll={handleScroll}
+          className="flex gap-6 sm:gap-7 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3 mb-10 no-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {CARDS_CONFIG.map((card) => {
             return (
               <div
                 key={card.id}
                 onClick={() => setSelectedModalCap(card)}
-                className="group relative rounded-[28px] overflow-hidden p-8 sm:p-9 min-h-[460px] sm:min-h-[500px] flex flex-col justify-between transition-all duration-500 cursor-pointer shadow-xs hover:shadow-2xl"
+                className="w-[88vw] sm:w-[calc(50%-14px)] lg:w-[calc(33.333%-19px)] shrink-0 snap-start group relative rounded-[28px] overflow-hidden p-8 sm:p-9 min-h-[460px] sm:min-h-[500px] flex flex-col justify-between transition-all duration-500 cursor-pointer shadow-xs hover:shadow-2xl"
                 style={{
                   backgroundColor: card.defaultBg,
                 }}
@@ -207,11 +239,11 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
                   </h3>
 
                   {/* Description: Slate by default, crisp white on hover */}
-                  <p className="mt-3 text-sm text-slate-600 group-hover:text-white/90 leading-relaxed transition-colors duration-300 line-clamp-3">
+                  <p className="mt-3 text-sm text-slate-600 group-hover:text-white/90 leading-relaxed transition-colors duration-300 line-clamp-3 text-justify">
                     {card.shortDesc}
                   </p>
 
-                  {/* Hover Pill CTA Button (IMAGE 2) */}
+                  {/* Hover Pill CTA Button */}
                   <div className="max-h-0 overflow-hidden group-hover:max-h-20 transition-all duration-500 ease-out pt-0 group-hover:pt-5">
                     <div className="w-full py-3 px-5 rounded-full bg-white hover:bg-slate-100 text-slate-950 text-xs sm:text-sm font-bold transition-all text-center flex items-center justify-center gap-2 shadow-lg group-hover:translate-y-0 translate-y-2 duration-300">
                       <span>{card.ctaLabel}</span>
@@ -225,33 +257,53 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
         </div>
 
         {/* ========================================================================= */}
-        {/* 3. Carousel Pagination Controls matching Image 1 & Image 2 (Bottom Left)  */}
+        {/* 3. Carousel Controls: Arrows (Left) & Indicator Dots (Right)              */}
         {/* ========================================================================= */}
-        <div className="flex items-center gap-3">
-          {/* Left Arrow Button */}
-          <button
-            type="button"
-            onClick={handlePrevSlide}
-            aria-label="Previous capabilities"
-            className="w-11 h-11 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 flex items-center justify-center transition-all shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
+        <div className="flex items-center justify-between">
+          {/* Arrow Buttons (Bottom Left matching images) */}
+          <div className="flex items-center gap-3">
+            {/* Left Arrow Button */}
+            <button
+              type="button"
+              onClick={handlePrev}
+              aria-label="Previous capabilities"
+              className="w-11 h-11 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 flex items-center justify-center transition-all shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
 
-          {/* Right Arrow Button (Dark Solid) */}
-          <button
-            type="button"
-            onClick={handleNextSlide}
-            aria-label="Next capabilities"
-            className="w-11 h-11 rounded-full bg-slate-950 hover:bg-slate-900 text-white flex items-center justify-center transition-all shadow-2xs hover:shadow-md active:scale-95 cursor-pointer"
-          >
-            <ArrowRight className="w-4 h-4" />
-          </button>
+            {/* Right Arrow Button (Dark Solid) */}
+            <button
+              type="button"
+              onClick={handleNext}
+              aria-label="Next capabilities"
+              className="w-11 h-11 rounded-full bg-slate-950 hover:bg-slate-900 text-white flex items-center justify-center transition-all shadow-2xs hover:shadow-md active:scale-95 cursor-pointer"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Indicator Dots */}
+          <div className="flex items-center gap-1.5">
+            {CARDS_CONFIG.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => scrollToIndex(idx)}
+                aria-label={`Go to capability ${idx + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  currentIndex === idx
+                    ? 'w-7 h-2 bg-blue-600'
+                    : 'w-2 h-2 bg-slate-200 hover:bg-slate-300'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       {/* ========================================================================= */}
-      {/* 4. Technical Architecture Drill-Down Modal (Zero Red, Blue/Black/White)   */}
+      {/* 4. Technical Architecture Drill-Down Modal                                */}
       {/* ========================================================================= */}
       {selectedModalCap && (
         <div
@@ -287,8 +339,8 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
             </div>
 
             {/* Modal Scrollable Body */}
-            <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-6" data-lenis-prevent>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed text-justify">
                 {selectedModalCap.fullDesc}
               </p>
 
@@ -366,3 +418,5 @@ export const Capabilities: React.FC<CapabilitiesProps> = ({ onSelectService }) =
     </section>
   );
 };
+
+export const Capabilities = memo(CapabilitiesComponent);

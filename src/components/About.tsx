@@ -1,14 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { 
-  GraduationCap, 
-  HeartHandshake, 
   CheckCircle2, 
-  XCircle, 
-  Award,
-  Globe2
+  XCircle 
 } from 'lucide-react';
 
-export const About: React.FC = () => {
+export const AboutComponent: React.FC = () => {
   const pillars = [
     {
       number: '01',
@@ -32,21 +28,25 @@ export const About: React.FC = () => {
 
   const comparisonRows = [
     {
+      sno: '01',
       feature: 'Data Sovereignty & Model Training',
       generic: 'Prompts potentially retained or used for public foundation model retraining',
       tokenWave: 'Zero data retention. 100% Sovereign VPC custody; strictly client-owned weights.',
     },
     {
+      sno: '02',
       feature: 'Hallucination & Policy Risk',
       generic: 'Probabilistic black-box output; high vulnerability to jailbreaks and prompt injection',
       tokenWave: 'Deterministic AST verification & formal evaluation layers intercept 100% of schema drift.',
     },
     {
+      sno: '03',
       feature: 'Latency SLA (P99)',
       generic: '800ms - 3,500ms dependent on public multi-tenant cloud load',
       tokenWave: 'Sub-38ms local Triton / Ray inference with dedicated GPU reservation.',
     },
     {
+      sno: '04',
       feature: 'Enterprise Compliance Certification',
       generic: 'Self-attested generic cloud terms of service',
       tokenWave: 'SOC2 Type II, ISO 42001 (AI Management), HIPAA BAA, and FedRAMP High Ready.',
@@ -61,7 +61,7 @@ export const About: React.FC = () => {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 font-heading tracking-tight">
             Governed Intelligence: Precision AI You Can Audit and Trust
           </h2>
-          <p className="mt-4 text-slate-600 text-base sm:text-lg">
+          <p className="mt-4 text-slate-600 text-base sm:text-lg max-w-2xl mx-auto text-center leading-relaxed">
             We reject the dogma that enterprises must surrender proprietary data or accept black-box hallucinations to harness cutting-edge multi-agent intelligence.
           </p>
         </div>
@@ -86,7 +86,7 @@ export const About: React.FC = () => {
                   {pillar.title}
                 </h3>
 
-                <p className="mt-4 text-sm text-slate-600 leading-relaxed">
+                <p className="mt-4 text-sm text-slate-600 leading-relaxed text-justify">
                   {pillar.desc}
                 </p>
               </div>
@@ -116,17 +116,21 @@ export const About: React.FC = () => {
           </div>
 
           <div className="divide-y divide-slate-100 overflow-x-auto">
-            <table className="w-full text-left text-sm border-collapse">
+            <table className="w-full text-left text-sm border-collapse min-w-[640px]">
               <thead>
                 <tr className="bg-slate-50 text-slate-600 font-mono text-xs uppercase">
-                  <th className="p-4 sm:p-5 w-1/3">Evaluation Metric</th>
-                  <th className="p-4 sm:p-5 w-1/3 text-slate-400">Generic Public Cloud LLM</th>
-                  <th className="p-4 sm:p-5 w-1/3 text-blue-600 font-bold bg-blue-50/50">TokenWave Governed Swarms</th>
+                  <th className="p-4 sm:p-5 w-16 sm:w-20 text-center font-mono text-xs uppercase text-slate-500">S.No.</th>
+                  <th className="p-4 sm:p-5">Evaluation Metric</th>
+                  <th className="p-4 sm:p-5 text-slate-400">Generic Public Cloud LLM</th>
+                  <th className="p-4 sm:p-5 text-blue-600 font-bold bg-blue-50/50">TokenWave Governed Swarms</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {comparisonRows.map((row, i) => (
                   <tr key={i} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="p-4 sm:p-5 text-center font-mono font-bold text-slate-500 text-xs sm:text-sm">
+                      {row.sno}
+                    </td>
                     <td className="p-4 sm:p-5 font-bold text-slate-900">
                       {row.feature}
                     </td>
@@ -148,54 +152,10 @@ export const About: React.FC = () => {
             </table>
           </div>
         </div>
-
-        {/* Global Impact & Academic Initiatives */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Initiative 1: Foundation */}
-          <div className="rounded-2xl p-8 bg-gradient-to-br from-white to-slate-50 border border-slate-200/90 shadow-md flex items-start gap-5">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <HeartHandshake className="w-7 h-7" />
-            </div>
-            <div>
-              <div className="text-xs font-mono uppercase tracking-wider text-blue-600 font-bold">
-                Corporate Social Responsibility
-              </div>
-              <h4 className="text-xl font-bold text-slate-900 font-heading mt-1">
-                TokenWave AI Innovation Foundation
-              </h4>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                We dedicate 1.5% of annual cloud compute resources to non-profit global research institutions fighting climate collapse, developing open-source rare disease diagnostics, and promoting equitable STEM education.
-              </p>
-              <div className="mt-4 flex items-center gap-2 text-xs font-mono text-slate-500">
-                <Globe2 className="w-4 h-4 text-blue-600" />
-                <span>Active grants in 14 countries • 100% open-access publications</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Initiative 2: Institute */}
-          <div className="rounded-2xl p-8 bg-gradient-to-br from-white to-slate-50 border border-slate-200/90 shadow-md flex items-start gap-5">
-            <div className="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0">
-              <GraduationCap className="w-7 h-7 text-blue-400" />
-            </div>
-            <div>
-              <div className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">
-                Talent &amp; Applied Research
-              </div>
-              <h4 className="text-xl font-bold text-slate-900 font-heading mt-1">
-                TokenWave AI Institute &amp; Academy
-              </h4>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Co-incubating next-generation AI systems engineers alongside top university CS departments (Stanford, Cambridge, IISc, NUS). Our fellows publish breakthrough research in multi-agent game theory and deterministic verification.
-              </p>
-              <div className="mt-4 flex items-center gap-2 text-xs font-mono text-slate-500">
-                <Award className="w-4 h-4 text-blue-600" />
-                <span>350+ PhD &amp; Master fellows trained • 24 Tier-1 conference papers</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
 };
+
+export const About = memo(AboutComponent);
+

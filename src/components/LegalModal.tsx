@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, ShieldCheck, FileText, CheckCircle2, Cpu } from 'lucide-react';
+import { X, ShieldCheck, FileText, CheckCircle2, Cpu, ExternalLink } from 'lucide-react';
 import type { LegalModalType, CaseStudy } from '../types';
 
 interface LegalModalProps {
@@ -34,7 +34,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
     switch (modalType) {
       case 'privacy':
         return (
-          <div className="space-y-4 text-sm text-slate-600 leading-relaxed">
+          <div className="space-y-4 text-sm text-slate-600 leading-relaxed text-justify">
             <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-mono flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Zero-Data-Retention &amp; Zero-Telemetry Egress Guaranteed</span>
@@ -56,7 +56,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
 
       case 'terms':
         return (
-          <div className="space-y-4 text-sm text-slate-600 leading-relaxed">
+          <div className="space-y-4 text-sm text-slate-600 leading-relaxed text-justify">
             <h4 className="text-base font-bold text-slate-900">1. Enterprise Pilot Engagements</h4>
             <p>
               All TokenWave AI production pilots and proofs-of-concept are governed by signed Master Services Agreements (MSA) and bilateral Mutual Non-Disclosure Agreements (M-NDA).
@@ -74,7 +74,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
 
       case 'accessibility':
         return (
-          <div className="space-y-4 text-sm text-slate-600 leading-relaxed">
+          <div className="space-y-4 text-sm text-slate-600 leading-relaxed text-justify">
             <h4 className="text-base font-bold text-slate-900">Commitment to Digital Accessibility</h4>
             <p>
               TokenWave AI is committed to ensuring digital accessibility for people of all abilities. We continually improve the user experience for everyone and apply the relevant accessibility standards, conforming to <strong>Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</strong>.
@@ -91,7 +91,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
 
       case 'cookies':
         return (
-          <div className="space-y-4 text-sm text-slate-600 leading-relaxed">
+          <div className="space-y-4 text-sm text-slate-600 leading-relaxed text-justify">
             <div className="p-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono">
               Strictly Essential Telemetry Only — Zero Ad Trackers
             </div>
@@ -121,7 +121,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
               <h3 className="text-xl font-extrabold text-slate-950 font-heading">
                 {selectedCaseStudy.title}
               </h3>
-              <p className="mt-2 text-slate-600">
+              <p className="mt-2 text-slate-600 leading-relaxed text-justify">
                 {selectedCaseStudy.summary}
               </p>
             </div>
@@ -159,12 +159,28 @@ export const LegalModal: React.FC<LegalModalProps> = ({
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200 text-xs italic text-amber-950">
-              "{selectedCaseStudy.quote.text}"
-              <div className="mt-2 font-mono not-italic font-bold text-slate-900">
-                — {selectedCaseStudy.quote.author}, {selectedCaseStudy.quote.title}
+            {selectedCaseStudy.quote && selectedCaseStudy.quote.text && (
+              <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200 text-xs italic text-amber-950">
+                "{selectedCaseStudy.quote.text}"
+                <div className="mt-2 font-mono not-italic font-bold text-slate-900">
+                  — {selectedCaseStudy.quote.author}, {selectedCaseStudy.quote.title}
+                </div>
               </div>
-            </div>
+            )}
+
+            {selectedCaseStudy.link && (
+              <div className="pt-2">
+                <a
+                  href={selectedCaseStudy.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
+                >
+                  <span>Explore Full Case Study Live</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            )}
           </div>
         );
 
@@ -216,7 +232,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto">
+        <div className="p-6 overflow-y-auto" data-lenis-prevent>
           {renderContent()}
         </div>
 

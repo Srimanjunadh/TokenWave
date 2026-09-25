@@ -1,4 +1,5 @@
 import React from 'react';
+import { scrollToSection } from '../utils/scroll';
 
 interface LogoProps {
   className?: string;
@@ -36,8 +37,7 @@ export const Logo: React.FC<LogoProps> = ({
     if (onClick) {
       onClick();
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      history.pushState(null, '', '#home');
+      scrollToSection('home');
     }
   };
 
